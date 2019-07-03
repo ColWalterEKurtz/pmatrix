@@ -330,11 +330,24 @@ int main(int argc, char** argv)
   // no lines extracted
   if ( entries.empty() )
   {
-    // notify user
-    cerr << "no entries given" << endl;
+    // show example
+    for(unsigned i = 0; i < 3; i++)
+    {
+      // a_{ij}
+      for(unsigned j = 0; j < 4; j++)
+      {
+        cout << indent << "a_{" << (10 * (i + 1) + (j + 1)) << "}" << endl;
+      }
 
-    // signalize trouble
-    return 1;
+      // signalize end of first row
+      if (i == 0)
+      {
+        cout << indent << "..." << endl;
+      }
+    }
+
+    // signalize success
+    return 0;
   }
 
   // number of columns still unknown
@@ -343,14 +356,14 @@ int main(int argc, char** argv)
     // calculate square root
     int root = static_cast<int>( sqrt(entries.size()) );
 
-    // check if quadratic matrix is given
+    // create quadratic matrix by default
     if ( (root * root) == entries.size() )
     {
       nrows = root;
       ncols = root;
     }
 
-    // create vector by default
+    // create vector in a pinch
     else
     {
       ncols = 1;
