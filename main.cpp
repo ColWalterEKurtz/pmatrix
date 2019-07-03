@@ -6,7 +6,7 @@
  * @brief      This file holds the program's main() function
  *             and doxygen's main page.
  * @author     Col. Walter E. Kurtz
- * @version    2019-07-02
+ * @version    2019-07-03
  * @copyright  GNU General Public License - Version 3.0
  *
  * @mainpage
@@ -291,7 +291,10 @@ int main(int argc, char** argv)
     line = trim(line);
 
     // skip empty lines
-    if ( line.empty() )
+    if ( line.empty() ) continue;
+
+    // end of first row manually given
+    if (line == "...")
     {
       // check if number of columns is still unknown
       if (ncols == 0)
@@ -299,13 +302,10 @@ int main(int argc, char** argv)
         // first empty line finishes first row of the matrix
         ncols = entries.size();
       }
-
-      // don't add empty entries
-      continue;
     }
 
     // add 'empty' entry
-    if (line == ".")
+    else if (line == ".")
     {
       entries.push_back("");
     }
@@ -327,6 +327,16 @@ int main(int argc, char** argv)
     }
   }
 
+  // no lines extracted
+  if ( entries.empty() )
+  {
+    // notify user
+    cerr << "no entries given" << endl;
+
+    // signalize trouble
+    return 1;
+  }
+
   // number of columns still unknown
   if (ncols == 0)
   {
@@ -340,13 +350,11 @@ int main(int argc, char** argv)
       ncols = root;
     }
 
+    // create vector by default
     else
     {
-      // notify user
-      cerr << "unable to determin matrix size (insert an empty line after first row)" << endl;
-
-      // signalize trouble
-      return 1;
+      ncols = 1;
+      nrows = entries.size();
     }
   }
 
